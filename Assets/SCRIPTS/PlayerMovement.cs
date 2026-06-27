@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class PlayerMovement : MonoBehaviour
 {
     //CLICK TO MOVE:
-    private NavMeshAgent agent;
+ private NavMeshAgent agent;
     private Animator anim;
 
     [Header("Movement")]
@@ -41,6 +41,6 @@ public class PlayerMovement : MonoBehaviour
         }
         //Player Animation
         float normalizedSpeed = Mathf.InverseLerp(0f, agent.speed, agent.velocity.magnitude);
-        anim.SetFloat("speed", normalizedSpeed);
+        anim.SetFloat("Vert", normalizedSpeed);
     }
 }
