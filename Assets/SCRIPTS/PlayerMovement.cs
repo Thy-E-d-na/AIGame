@@ -17,9 +17,9 @@ public class PlayerMovement : MonoBehaviour
     public static event System.Action<Vector3> OnGroundTouch;
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        //anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        agent.speed = walkSpeed;
+        walkSpeed = agent.speed;
     }
     private void Update()
     {
@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, groundLayer))
+            if (Physics.Raycast(ray, out hit,200f, groundLayer))
             {
                 //check if the clicked point is on the NavMesh
                 if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, sampleDistance, NavMesh.AllAreas))
@@ -35,12 +35,16 @@ public class PlayerMovement : MonoBehaviour
                     agent.SetDestination(navHit.position);
                     OnGroundTouch?.Invoke(navHit.position);
                 }
-                else
-                    Debug.Log("Clicked point is not on the NavMesh.");
+                
             }
+            else
+                Debug.Log("Clicked point is not on the NavMesh.");
         }
-        //Player Animation
-        float normalizedSpeed = Mathf.InverseLerp(0f, agent.speed, agent.velocity.magnitude);
-        anim.SetFloat("Vert", normalizedSpeed);
+        ////Player Animation
+        //float normalizedSpeed = Mathf.InverseLerp(0f, agent.speed, agent.velocity.magnitude);
+        //anim.SetFloat("speed", normalizedSpeed);
     }
+
+
 }
+ 
