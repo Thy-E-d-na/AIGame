@@ -10,14 +10,18 @@ public class keyScript : MonoBehaviour, I_Interactable
         pos.y += 1;
         transform.position = pos;
     }
-    public void Interact()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
     {
         transform.Rotate(Vector3.up * rotSpeed * Time.deltaTime);
+    }
+
+    [SerializeField] private GameObject vfx;
+    public void Interact()
+    {
+        var v = Instantiate(vfx, transform.position, Quaternion.identity);
+        Destroy(v, 1f);
+        Destroy(gameObject);
     }
 }

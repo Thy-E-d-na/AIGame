@@ -40,8 +40,9 @@ public class CameraMovement : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if(Mathf.Abs(scroll) > 0.01f)
         {
-            var dir = -transform.forward + transform.up;
-            transform.position += -dir * scroll * _zoomSpeed;
+            //var dir = -transform.forward + transform.up;
+            //transform.position += -dir * scroll * _zoomSpeed;
+            Camera.main.fieldOfView -= scroll * _zoomSpeed;
         }
     }
 }

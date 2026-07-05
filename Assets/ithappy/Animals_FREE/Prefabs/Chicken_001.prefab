@@ -1156,7 +1156,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8881504610387854135}
-  - component: {fileID: 8881504610387854123}
   - component: {fileID: 8881504610387854120}
   - component: {fileID: 8955824385159300788}
   - component: {fileID: 2025872250966241021}
@@ -1184,31 +1183,6 @@ Transform:
   - {fileID: 5260241464314499896}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &8881504610387854123
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8073443194988779917}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 0.63
-  m_Radius: 0.26
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.31, z: 0}
 --- !u!95 &8881504610387854120
 Animator:
   serializedVersion: 7
@@ -1256,10 +1230,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e54187bfe733341a6dbae5939ba3a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  clickEffefct: {fileID: 0}
-  clickableLayer:
+  walkSpeed: 3.5
+  groundLayer:
     serializedVersion: 2
     m_Bits: 0
+  sampleDistance: 0.5
+  clickEffect: {fileID: 0}
 --- !u!1 &8122850409471221505
 GameObject:
   m_ObjectHideFlags: 0

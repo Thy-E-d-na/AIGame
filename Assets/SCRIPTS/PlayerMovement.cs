@@ -3,22 +3,30 @@ using UnityEngine.AI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    const string IDLE = "Idle";
+    const string RUN = "Run";
+    const string STEALTH = "Stealth";
+
     //CLICK TO MOVE:
- private NavMeshAgent agent;
+    private NavMeshAgent agent;
     private Animator anim;
 
     [Header("Movement")]
     public float walkSpeed = 3.5f;
-
-    [Header("Input Setting")]
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float sampleDistance = 0.5f;
+    [SerializeField] private GameObject clickEffect;
+
+    private void Awake()
+    {
+        agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
+
+    }
 
     public static event System.Action<Vector3> OnGroundTouch;
     private void Start()
     {
-        //anim = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
         walkSpeed = agent.speed;
     }
     private void Update()
@@ -32,7 +40,13 @@ public class PlayerMovement : MonoBehaviour
                 //check if the clicked point is on the NavMesh
                 if (NavMesh.SamplePosition(hit.point, out NavMeshHit navHit, sampleDistance, NavMesh.AllAreas))
                 {
+                    if(clickEffect != null)
+                    {
+                        var click = Instantiate(clickEffect, hit.point += new Vector3(0,0.1f,0), Quaternion.identity);
+                        Destroy(click, 1f);
+                    }
                     agent.SetDestination(navHit.position);
+                    
                     OnGroundTouch?.Invoke(navHit.position);
                 }
                 
@@ -40,11 +54,20 @@ public class PlayerMovement : MonoBehaviour
             else
                 Debug.Log("Clicked point is not on the NavMesh.");
         }
-        ////Player Animation
-        //float normalizedSpeed = Mathf.InverseLerp(0f, agent.speed, agent.velocity.magnitude);
-        //anim.SetFloat("speed", normalizedSpeed);
+        SetAnim();
+
     }
 
-
+    void SetAnim()
+    {
+        if (agent.velocity == Vector3.zero)
+        {
+            anim.Play(IDLE);
+        }
+        else
+        {
+            anim.Play(RUN);
+        }
+    }
 }
  
