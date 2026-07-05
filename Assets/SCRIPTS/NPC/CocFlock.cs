@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CocFlock : MonoBehaviour
@@ -24,6 +26,9 @@ public class CocFlock : MonoBehaviour
 
 
     public Transform target;
+    public Transform player;
+    public float fleeRadius = 3f;
+
 
     public LayerMask boidLayerMask;
 
@@ -32,14 +37,33 @@ public class CocFlock : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentVelocity = transform.forward * maxSpeed;
+        currentVelocity = transform.forward;
     }
 
     // Update is called once per frame
     void Update()
     {
+        var flee = false;
+        var find = Physics.OverlapSphere(transform.position, fleeRadius);
+        foreach (var hit in find)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                player = hit.transform;
+                flee = true;
+                break;
+            }              
+                
+        }
+        if(flee) Flee();
+        else Flocking();
+
+
+    }
+    void Flocking()
+    {
         var hitColliders = Physics.OverlapSphere(transform.position,
-            neighborRadius, boidLayerMask);
+          neighborRadius, boidLayerMask);
         var neighbors = new List<Transform>();
 
         foreach (var hitCollider in hitColliders)
@@ -54,10 +78,10 @@ public class CocFlock : MonoBehaviour
         var seekForce = target != null ? Seek(target.position) * seekWeight : Vector3.zero;
 
         var totalForce = separationForce + alignmentForce + cohesionForce + seekForce;
-        
+
         totalForce = Vector3.ClampMagnitude(totalForce, maxForce);
 
-       
+
         currentVelocity += totalForce * Time.deltaTime;
         currentVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
 
@@ -68,6 +92,12 @@ public class CocFlock : MonoBehaviour
         }
     }
 
+    void Flee()
+    {
+        var velocity = (transform.position - player.position).normalized * maxSpeed;
+        transform.position += (velocity - currentVelocity) * Time.deltaTime;
+        
+    }
     // luc keo ve muc tieu
     Vector3 Seek(Vector3 targetPosition)
     {
