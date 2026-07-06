@@ -11,7 +11,7 @@ public class InteractCheck : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (GetInteractableBox() != null) GetInteractableBox().Interact();
-            if (GetInteractableKey() != null) GetInteractableKey().Interact();
+            if (gameMngt.Instance.gotKey && CheckDoor()) gameMngt.Instance.OnWin();
         }
     }
 
@@ -29,17 +29,18 @@ public class InteractCheck : MonoBehaviour
         }
         return null;
     }
-    public keyScript GetInteractableKey()
+     public bool CheckDoor()
     {
         Collider[] arr = Physics.OverlapSphere(transform.position, keyRange);
         foreach (Collider col in arr)
         {
-            if (col.TryGetComponent(out keyScript interact))
+            if (col.CompareTag("Door"))
             {
-
-                return interact;
+                return true;
+                
             }
         }
-        return null;
+        return false;
     }
+  
 }

@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sampleDistance = 0.5f;
     [SerializeField] private GameObject clickEffect;
 
+    [SerializeField] private GameObject stealthPrefab;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -55,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Clicked point is not on the NavMesh.");
         }
         SetAnim();
-
+        
     }
 
     void SetAnim()

@@ -16,12 +16,21 @@ public class BubbleUI : MonoBehaviour
     private void Update()
     {
         interactBtnCheck();
-
+        if(gameMngt.Instance.gotKey) EnterDoor();
+      
     }
 
     void interactBtnCheck()
     {
         if (RangeCheck.GetInteractableBox() != null) Show();
+        else Hide();
+    }
+    void EnterDoor()
+    {
+        if (RangeCheck.CheckDoor())
+        {
+            Show();
+        }
         else Hide();
     }
 }
