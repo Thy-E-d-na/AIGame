@@ -5,7 +5,6 @@ public class PlayerMovement : MonoBehaviour
 {
     const string IDLE = "Idle";
     const string RUN = "Run";
-    const string STEALTH = "Stealth";
 
     //CLICK TO MOVE:
     private NavMeshAgent agent;
@@ -17,7 +16,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sampleDistance = 0.5f;
     [SerializeField] private GameObject clickEffect;
 
-    [SerializeField] private GameObject stealthPrefab;
 
     private void Awake()
     {
@@ -57,7 +55,22 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("Clicked point is not on the NavMesh.");
         }
         SetAnim();
-        
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            EnterStealth();           
+        }
+        if (inDisguised)
+        {
+            if (Input.GetKeyDown(KeyCode.X)) ExitStealth();
+        }
+
+        if (disguiseInstance != null)
+        {
+            disguiseInstance.transform.SetParent(transform);
+            disguiseInstance.transform.localPosition = Vector3.zero;
+        } 
+            
     }
 
     void SetAnim()
@@ -70,6 +83,30 @@ public class PlayerMovement : MonoBehaviour
         {
             anim.Play(RUN);
         }
+    }
+
+    public delegate void StealthStateHandler(bool isStealth);
+
+    public StealthStateHandler OnStealthChanged;
+    public bool inDisguised = false;
+    public GameObject[] disguiseObj;
+    private GameObject disguiseInstance;
+    
+    void EnterStealth()
+    {
+        if (disguiseInstance == null)
+        {
+            disguiseInstance = Instantiate(disguiseObj[Random.Range(0, disguiseObj.Length)], transform.position, Quaternion.identity);
+            OnStealthChanged?.Invoke(true); //send event start stealth
+            inDisguised = true;
+        }
+    }
+    void ExitStealth()
+    {
+        Destroy(disguiseInstance);
+        disguiseInstance = null;
+        OnStealthChanged?.Invoke(false);
+        inDisguised = false; //sned event back to normal
     }
 }
  
