@@ -8,6 +8,7 @@ public class EnemyVision : MonoBehaviour
     [Range(1,5)]public float stealthVision = 5f;
     [Range(1,5)] public float stealthFoV = 70f;
     public GameObject visionCone;
+
     [Header("normal vision")]
 
     float visualRange; // vision range
@@ -33,17 +34,12 @@ public class EnemyVision : MonoBehaviour
         {
             visualRange = stealthVision;
             viewAngle = stealthFoV;
-            Debug.Log("STEALINGGGGGGG");
-            //visionCone.SetActive(true);
-            //visionMesh();
+           
         }
         else
         {
             visualRange = normalVision;
             viewAngle = normalFoV;
-            Debug.Log("NORMALLLLL");
-            //visionCone.SetActive(false);
-            //GetComponent<MeshRenderer>().enabled = false;
 
         }
     }

@@ -42040,6 +42040,46 @@ MonoBehaviour:
     m_Bits: 960
   canSeeTarget: 0
   sensorTickRate: 0.5
+--- !u!195 &1688484075
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688484069}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &1688484076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688484069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 206db9753d2fc314bbad334caa6ec5b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BehaviourTree
+  agent: {fileID: 1688484075}
+  player: {fileID: 1930948412}
+  currentHealth: 100
+  chaseRange: 8
+  attackRange: 1
+  patrolRadius: 20
 --- !u!1001 &1689392652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58135,6 +58175,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3363926407895442641, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1688484072}
+    - targetCorrespondingSourceObject: {fileID: 3363926407895442641, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1688484076}
+    - targetCorrespondingSourceObject: {fileID: 3363926407895442641, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1688484075}
   m_SourcePrefab: {fileID: 100100000, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
 --- !u!4 &4173550786175429399 stripped
 Transform:

@@ -1,13 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CocFlock : MonoBehaviour
 {
-   
-
     public float maxSpeed = 5f;
     public float maxForce = 5f;
 
@@ -38,8 +33,14 @@ public class CocFlock : MonoBehaviour
     void Start()
     {
         currentVelocity = transform.forward;
+        BehaviourTree npc = FindAnyObjectByType<BehaviourTree>();
+        npc.doaChanged += corpseEater;
     }
 
+    void corpseEater()
+    {
+
+    }
     // Update is called once per frame
     void Update()
     {

@@ -85,7 +85,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+   
+
     public delegate void StealthStateHandler(bool isStealth);
+
+    [Header("Stealth")]
 
     public StealthStateHandler OnStealthChanged;
     public bool inDisguised = false;
