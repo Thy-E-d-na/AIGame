@@ -7,20 +7,53 @@ using UnityEngine.AI;
 
 public class BehaviourTree : MonoBehaviour
 {
-    public delegate void DoAHandler();
+   // public delegate void DoAHandler();
 
-    public DoAHandler doaChanged;
+    //public DoAHandler doaChanged;
+
+    //void enemyDead()
+    //{
+    //    doaChanged?.Invoke();
+    //}
+    [Range(1, 10)] public float normalVision = 10f;
+    [Range(1, 90)] public float normalFoV = 90f;
+    [Range(1, 5)] public float stealthVision = 4f;
+    [Range(1, 70)] public float stealthFoV = 70f;
+
+    [Header("normal vision")]
+
+    public float visualRange; // vision range
+    public float viewAngle; // fov
+
+    [Header("obstacles")]
+    public LayerMask obstacleMask;
+
+    // delay time variable
+    public float sensorTickRate = 0.5f;
    
-    void enemyDead()
+    void HandleStealthState(bool isStealth)
     {
-        doaChanged?.Invoke();
+        if (isStealth)
+        {
+            visualRange = stealthVision;
+            viewAngle = stealthFoV;
+
+        }
+        else
+        {
+            visualRange = normalVision;
+            viewAngle = normalFoV;
+
+        }
     }
 
+    public bool playerDetect;
+
     public NavMeshAgent agent;
-    public Transform player;
+    public Transform playerPos;
 
     public float currentHealth = 100f;
-    public float chaseRange = 10f;
+    //public float chaseRange = 10f;
     public float attackRange = 2f;
     public float patrolRadius = 8f;
 
@@ -29,6 +62,12 @@ public class BehaviourTree : MonoBehaviour
     private Vector3 startPosition;
     private void Start()
     {
+
+        PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+        player.OnStealthChanged += HandleStealthState;
+
+        HandleStealthState(false);
+
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
 
@@ -37,10 +76,10 @@ public class BehaviourTree : MonoBehaviour
         Patrol patrol = new Patrol(agent, startPosition, patrolRadius);
         patrol.order = 2;
         //2.Chase
-        Sequence chase = new Sequence(new List<Node> { new CheckDistance(transform, player, chaseRange),new Chase(agent,player)});
+        Sequence chase = new Sequence(new List<Node> { new enemyVision(this,transform,playerPos),new Chase(agent,playerPos)});
         chase.order = 1;
         //3. Atk
-        Sequence atk = new Sequence(new List<Node> { new CheckDistance(transform,player, attackRange), new Attack(agent,transform,player)});
+        Sequence atk = new Sequence(new List<Node> { new CheckDistance(transform,playerPos, attackRange), new Attack(agent,transform,playerPos)});
         atk.order = 0;
         selector = new Selector(new List<Node> 
         {
@@ -52,7 +91,7 @@ public class BehaviourTree : MonoBehaviour
 
     private void Update()
     {
-        if (currentHealth <= 0) enemyDead();
+        //if (currentHealth <= 0) enemyDead();
         selector.Evaluate();
     }
 }
@@ -186,6 +225,7 @@ public class Patrol: Node
             if (NavMesh.SamplePosition(randomDirection, out hit, patrolR, NavMesh.AllAreas))
             {
                 e_agent.SetDestination(hit.position);
+         
             }
         }
         state = NodeState.Running;
@@ -232,6 +272,7 @@ public class Attack: Node
         e_agent.isStopped = true; // dung lai de danh
         _transform.LookAt(_target);
         state = NodeState.Running;
+        gameMngt.Instance.isDefeated = true;
         return state;
     }
 
@@ -258,6 +299,36 @@ public class CheckDistance: Node
     {
         var distance = Vector3.Distance(_transform.position, _target.position);
         return distance <= this._range ? NodeState.Success : NodeState.Failed;
+    }
+}
+public class enemyVision: Node
+{
+    private BehaviourTree _npc;
+    private Transform _target;
+    private Transform _transform;
+    public enemyVision(BehaviourTree npc, Transform transform, Transform target)
+    {
+        this._npc = npc;
+        this._target= target;
+        this._transform = transform;  
+    }
+    public override NodeState Evaluate()
+    {
+        _npc.playerDetect = false;
+        var distance = Vector3.Distance(_transform.position,_target.position);
+        if (distance <= _npc.visualRange)
+        {
+            var direction = (_target.position - _transform.position).normalized;
+            var angle = Vector3.Angle(_transform.forward, direction);
+            if(angle < _npc.viewAngle/2)
+            {
+                if(Physics.Raycast(_transform.position,direction, out RaycastHit hit, distance, _npc.obstacleMask))
+                    _npc.playerDetect = true;
+               
+            }
+        }
+        return _npc.playerDetect ? NodeState.Success : NodeState.Failed;
+
     }
 }
 

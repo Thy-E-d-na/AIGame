@@ -11,11 +11,12 @@ public class gameMngt : MonoBehaviour
 
     [SerializeField] private GameObject keyPref;
     [SerializeField] private GameObject winPnl;
+    [SerializeField] private GameObject defeatedPnl;
 
     public bool gotKey = false;
     public Transform[] keyPos;
 
-
+    public bool isDefeated = false;
 
     private void Start()
     {
@@ -30,4 +31,11 @@ public class gameMngt : MonoBehaviour
         winPnl.SetActive(gotKey);
     }
 
+    public void OnDefeated()
+    {
+        if(isDefeated)
+        {
+            defeatedPnl.SetActive(isDefeated);
+        }
+    }
 }

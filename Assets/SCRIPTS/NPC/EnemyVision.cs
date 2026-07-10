@@ -11,8 +11,8 @@ public class EnemyVision : MonoBehaviour
 
     [Header("normal vision")]
 
-    float visualRange; // vision range
-    float viewAngle; // fov
+    public float visualRange; // vision range
+    public float viewAngle; // fov
 
     [Header("obstacles")]
     public Transform target; // player

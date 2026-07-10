@@ -3798,7 +3798,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -42024,7 +42024,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1688484069}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa451138f9d5596479d10fbc78cf9cda, type: 3}
   m_Name: 
@@ -42034,6 +42034,8 @@ MonoBehaviour:
   stealthVision: 5
   stealthFoV: 5
   visionCone: {fileID: 640051772}
+  visualRange: 0
+  viewAngle: 0
   target: {fileID: 1930948412}
   obstacleMask:
     serializedVersion: 2
@@ -42074,12 +42076,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 206db9753d2fc314bbad334caa6ec5b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BehaviourTree
+  normalVision: 10
+  normalFoV: 90
+  stealthVision: 5
+  stealthFoV: 70
+  visualRange: 0
+  viewAngle: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  sensorTickRate: 0.5
+  playerDetect: 0
   agent: {fileID: 1688484075}
-  player: {fileID: 1930948412}
+  playerPos: {fileID: 1930948412}
   currentHealth: 100
-  chaseRange: 8
   attackRange: 1
-  patrolRadius: 20
+  patrolRadius: 10
 --- !u!1001 &1689392652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58130,7 +58142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5736767484410515364, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15
+      value: 31.57
       objectReference: {fileID: 0}
     - target: {fileID: 5736767484410515364, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
       propertyPath: m_LocalPosition.y
@@ -58138,7 +58150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5736767484410515364, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -15
+      value: -20.74
       objectReference: {fileID: 0}
     - target: {fileID: 5736767484410515364, guid: 78ab3880c99a2584aaa11fa5739c3a85, type: 3}
       propertyPath: m_LocalRotation.w

@@ -34,7 +34,7 @@ public class CocFlock : MonoBehaviour
     {
         currentVelocity = transform.forward;
         BehaviourTree npc = FindAnyObjectByType<BehaviourTree>();
-        npc.doaChanged += corpseEater;
+       
     }
 
     void corpseEater()
