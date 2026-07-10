@@ -63,7 +63,7 @@ public class BehaviourTree : MonoBehaviour
 
     public float currentHealth = 100f;
     public float chaseRange = 8f;
-    public float attackRange = 2f;
+    public float attackRange = 3f;
     public float patrolRadius = 8f;
 
     public Selector selector;
@@ -279,8 +279,9 @@ public class Attack : Node
     public override NodeState Evaluate()
     {
         e_agent.isStopped = true; // dung lai de danh
-        _transform.LookAt(_target);
+        _transform.LookAt(_target);        
         state = NodeState.Running;
+        soundMngt.sInstance.PlaySfx(1);
         gameMngt.Instance.isDefeated = true;
         return state;
     }
@@ -333,7 +334,7 @@ public class enemyVision : Node
             {
                 if (!Physics.Raycast(_transform.position, direction, out RaycastHit hit, distance, _npc.obstacleMask))
                     _npc.playerDetect = true;
-
+                soundMngt.sInstance.PlaySfx(2);
             }
         }
         return _npc.playerDetect ? NodeState.Success : NodeState.Failed;

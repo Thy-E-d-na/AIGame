@@ -4,55 +4,22 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class menuScript : MonoBehaviour
 {
-    [Header("Select Character")]
 
-    #region   Select Character
-    public Character selected;
-    public GameObject[] Animals;
-    public int number;
-    public float rotateSpeed = 0.5f;
-    public GameObject characterPnl;
-    public void ChangeCharacter(int num)
-    {
-        for (int i = 0; i < Animals.Length; i++)
-        {
-            Animals[i].SetActive(false);
-        }
-        number += num;
-        if (number > Animals.Length - 1)
-        {
-            number = 1;
-        }
-        if (number < 1)
-        {
-            number = Animals.Length - 1;
-        }
-        Animals[number].SetActive(true);
-        selected = (Character)number;
-    }
-
-    #endregion
+    public GameObject soundS;
     private void Start()
     {
+        soundMngt.sInstance.PlayBGM(3);
+    }
+    public void onPlay()
+    {
+        soundMngt.sInstance.stopSound();
+        soundMngt.sInstance.PlayBGM(Random.Range(0,2));
+        SceneManager.LoadScene(1);
 
     }
-    private void Update()
+   
+    public void toggle()
     {
-        Animals[number].transform.Rotate(Vector3.up * rotateSpeed * Time.deltaTime);
+       soundS.SetActive(!soundS.activeSelf);
     }
-    public void Create()
-    {
-        if (number == 0) return;
-        characterPnl.SetActive(false);
-        var chars = new List<GameObject>();
-        for (int i = 0; i < Animals.Length; i++)
-        {
-            if(i != number) chars.Add(Animals[i]);
-        }
-        foreach (GameObject character in chars)
-        {
-            Destroy(character);
-        }
-    }
-
 }

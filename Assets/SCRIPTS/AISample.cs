@@ -208,46 +208,46 @@
 
 //public class TaskAttackNode : Node
 //{
-//    private NavMeshAgent _agent;
-//    private Transform _target;
-//    private Transform _transform;
+//private NavMeshAgent _agent;
+//private Transform _target;
+//private Transform _transform;
 
-//    public TaskAttackNode(NavMeshAgent agent, Transform transform, Transform target)
-//    {
-//        this._agent = agent;
-//        this._transform = transform;
-//        this._target = target;
-//    }
-//    public override NodeState Evaluate()
-//    {
-//        _agent.isStopped = true; // dung lai de danh
-//        _transform.LookAt(_target);
-//        Debug.Log("....Dang chem Player....");
-//        state = NodeState.Running;
-//        return state;
-//    }
+//public TaskAttackNode(NavMeshAgent agent, Transform transform, Transform target)
+//{
+//    this._agent = agent;
+//    this._transform = transform;
+//    this._target = target;
+//}
+//public override NodeState Evaluate()
+//{
+//    _agent.isStopped = true; // dung lai de danh
+//    _transform.LookAt(_target);
+//    Debug.Log("....Dang chem Player....");
+//    state = NodeState.Running;
+//    return state;
+//}
 //}
 
 //public class TaskChaseNode : Node
 //{
-//    private NavMeshAgent _agent;
-//    private Transform _target;
+//private NavMeshAgent _agent;
+//private Transform _target;
 
-//    public TaskChaseNode(NavMeshAgent agent, Transform target)
-//    {
-//        this._agent = agent;
-//        this._target = target;
-//    }
+//public TaskChaseNode(NavMeshAgent agent, Transform target)
+//{
+//    this._agent = agent;
+//    this._target = target;
+//}
 
-//    public override NodeState Evaluate()
-//    {
-//        _agent.isStopped = false;
-//        _agent.speed = 10f;
-//        _agent.SetDestination(_target.position);
-//        Debug.Log("...Dang duoi theo Player....");
-//        state = NodeState.Running;
-//        return state;
-//    }
+//public override NodeState Evaluate()
+//{
+//    _agent.isStopped = false;
+//    _agent.speed = 10f;
+//    _agent.SetDestination(_target.position);
+//    Debug.Log("...Dang duoi theo Player....");
+//    state = NodeState.Running;
+//    return state;
+//}
 //}
 
 //public class TaskPatrolNode : Node
@@ -288,20 +288,20 @@
 
 //public class NpcAI : MonoBehaviour
 //{
-//    public NavMeshAgent agent;
-//    public Transform player;
+//public NavMeshAgent agent;
+//public Transform player;
 
-//    public float currentHealth = 100f;
-//    public float fleeHealth = 30f;
-//    public float chaseRange = 10f;
-//    public float attackRange = 2f;
-//    public float patrolRadius = 8f;
+//public float currentHealth = 100f;
+//public float fleeHealth = 30f;
+//public float chaseRange = 10f;
+//public float attackRange = 2f;
+//public float patrolRadius = 8f;
 
-//    public Selector rootNode;
-//    public Sequence fleeSequence;
-//    private bool isMutated = false; // có thay đổi không?
+//public Selector rootNode;
+//public Sequence fleeSequence;
+//private bool isMutated = false; // có thay đổi không?
 
-//    private Vector3 startPosition;
+//private Vector3 startPosition;
 
 //    // Start is called once before the first execution of Update after the MonoBehaviour is created
 //    void Start()

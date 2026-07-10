@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class soundMngt : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class soundMngt : MonoBehaviour
     [SerializeField] private AudioSource _SFX;
     [SerializeField] private AudioClip[] bgm;
     [SerializeField] private AudioClip[] sfx;
+
+    public Slider bgmVol;
+    public Slider sfxVol;
     private void Awake()
     {
         if (sInstance == null)
@@ -33,6 +37,23 @@ public class soundMngt : MonoBehaviour
         {
             _SFX.PlayOneShot(sfx[inde]);
         }
+    }
+
+    public void stopSound()
+    {
+        _BGM.Stop();
+        
+    }
+
+    public void BGMToggle(float vol)
+    {
+        bgmVol.value = vol;
+        _BGM.volume = bgmVol.value;
+    }
+    public void soundToggle(float vol)
+    {
+        sfxVol.value = vol;
+        _SFX.volume = sfxVol.value;
     }
 
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class gameMngt : MonoBehaviour
 {
@@ -11,7 +12,6 @@ public class gameMngt : MonoBehaviour
 
     [SerializeField] private GameObject keyPref;
     [SerializeField] private GameObject winPnl;
-    [SerializeField] private GameObject defeatedPnl;
 
     public bool gotKey = false;
     public Transform[] keyPos;
@@ -25,6 +25,7 @@ public class gameMngt : MonoBehaviour
     }
     private void Update()
     {
+        OnDefeated();
     }
     public void OnWin()
     {
@@ -35,7 +36,7 @@ public class gameMngt : MonoBehaviour
     {
         if(isDefeated)
         {
-            defeatedPnl.SetActive(isDefeated);
+            SceneManager.LoadScene(2);
         }
     }
 }
