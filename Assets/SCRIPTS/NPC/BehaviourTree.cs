@@ -7,7 +7,7 @@ using UnityEngine.AI;
 
 public class BehaviourTree : MonoBehaviour
 {
-   // public delegate void DoAHandler();
+    // public delegate void DoAHandler();
 
     //public DoAHandler doaChanged;
 
@@ -15,22 +15,23 @@ public class BehaviourTree : MonoBehaviour
     //{
     //    doaChanged?.Invoke();
     //}
-    [Range(1, 10)] public float normalVision = 10f;
-    [Range(1, 90)] public float normalFoV = 90f;
-    [Range(1, 5)] public float stealthVision = 4f;
-    [Range(1, 70)] public float stealthFoV = 70f;
+    public float normalVision = 10f;
+    public float normalFoV = 90f;
+    public float stealthVision = 4f;
+    public float stealthFoV = 70f;
 
     [Header("normal vision")]
 
     public float visualRange; // vision range
     public float viewAngle; // fov
+    private Light lightVision;
 
     [Header("obstacles")]
     public LayerMask obstacleMask;
 
     // delay time variable
     public float sensorTickRate = 0.5f;
-   
+
     void HandleStealthState(bool isStealth)
     {
         if (isStealth)
@@ -45,6 +46,14 @@ public class BehaviourTree : MonoBehaviour
             viewAngle = normalFoV;
 
         }
+        UpdateVisionLight();
+    }
+
+    void UpdateVisionLight()
+    {
+        if (lightVision == null) return;
+        lightVision.range = visualRange;
+        lightVision.spotAngle = viewAngle;
     }
 
     public bool playerDetect;
@@ -53,7 +62,7 @@ public class BehaviourTree : MonoBehaviour
     public Transform playerPos;
 
     public float currentHealth = 100f;
-    //public float chaseRange = 10f;
+    public float chaseRange = 8f;
     public float attackRange = 2f;
     public float patrolRadius = 8f;
 
@@ -67,7 +76,7 @@ public class BehaviourTree : MonoBehaviour
         player.OnStealthChanged += HandleStealthState;
 
         HandleStealthState(false);
-
+        lightVision = GetComponentInChildren<Light>();
         agent = GetComponent<NavMeshAgent>();
         startPosition = transform.position;
 
@@ -76,12 +85,12 @@ public class BehaviourTree : MonoBehaviour
         Patrol patrol = new Patrol(agent, startPosition, patrolRadius);
         patrol.order = 2;
         //2.Chase
-        Sequence chase = new Sequence(new List<Node> { new enemyVision(this,transform,playerPos),new Chase(agent,playerPos)});
+        Sequence chase = new Sequence(new List<Node> { new enemyVision(this, transform, playerPos), new CheckDistance(transform, playerPos, chaseRange),new Chase(agent, playerPos) });
         chase.order = 1;
         //3. Atk
-        Sequence atk = new Sequence(new List<Node> { new CheckDistance(transform,playerPos, attackRange), new Attack(agent,transform,playerPos)});
+        Sequence atk = new Sequence(new List<Node> { new CheckDistance(transform, playerPos, attackRange), new Attack(agent, transform, playerPos) });
         atk.order = 0;
-        selector = new Selector(new List<Node> 
+        selector = new Selector(new List<Node>
         {
             patrol,
             chase,
@@ -119,7 +128,7 @@ public abstract class Node
 
 #region   COMPOSITE
 
-public class Selector: Node
+public class Selector : Node
 {
     protected List<Node> nodes = new();
     public Selector(List<Node> nodes)
@@ -129,7 +138,7 @@ public class Selector: Node
     }
     public void SortChildren()
     {
-        nodes.Sort((a,b) => a.order.CompareTo(b.order));
+        nodes.Sort((a, b) => a.order.CompareTo(b.order));
     }
     public override NodeState Evaluate()
     {
@@ -155,7 +164,7 @@ public class Selector: Node
     }
 }
 
-public class Sequence: Node
+public class Sequence : Node
 {
     protected List<Node> nodes = new();
 
@@ -201,16 +210,16 @@ public class Sequence: Node
 #region ACTION LEAF
 
 //patroling
-public class Patrol: Node
+public class Patrol : Node
 {
     private NavMeshAgent e_agent;
     private Vector3 startPos;
     private float patrolR;
 
-    public Patrol(NavMeshAgent _agent,Vector3 _startPos, float _r)
+    public Patrol(NavMeshAgent _agent, Vector3 _startPos, float _r)
     {
-        this.e_agent = _agent; 
-        this.startPos = _startPos; 
+        this.e_agent = _agent;
+        this.startPos = _startPos;
         this.patrolR = _r;
     }
     public override NodeState Evaluate()
@@ -225,7 +234,7 @@ public class Patrol: Node
             if (NavMesh.SamplePosition(randomDirection, out hit, patrolR, NavMesh.AllAreas))
             {
                 e_agent.SetDestination(hit.position);
-         
+
             }
         }
         state = NodeState.Running;
@@ -234,7 +243,7 @@ public class Patrol: Node
 }
 
 //chase
-public class Chase: Node
+public class Chase : Node
 {
     private NavMeshAgent e_agent;
     private Transform _target;
@@ -255,7 +264,7 @@ public class Chase: Node
     }
 }
 //attack
-public class Attack: Node
+public class Attack : Node
 {
     private NavMeshAgent e_agent;
     private Transform _target;
@@ -283,7 +292,7 @@ public class Attack: Node
 
 #region CHECK CONDITION LEAF
 
-public class CheckDistance: Node
+public class CheckDistance : Node
 {
     private Transform _transform;
     private Transform _target;
@@ -301,7 +310,7 @@ public class CheckDistance: Node
         return distance <= this._range ? NodeState.Success : NodeState.Failed;
     }
 }
-public class enemyVision: Node
+public class enemyVision : Node
 {
     private BehaviourTree _npc;
     private Transform _target;
@@ -309,22 +318,22 @@ public class enemyVision: Node
     public enemyVision(BehaviourTree npc, Transform transform, Transform target)
     {
         this._npc = npc;
-        this._target= target;
-        this._transform = transform;  
+        this._target = target;
+        this._transform = transform;
     }
     public override NodeState Evaluate()
     {
         _npc.playerDetect = false;
-        var distance = Vector3.Distance(_transform.position,_target.position);
+        var distance = Vector3.Distance(_transform.position, _target.position);
         if (distance <= _npc.visualRange)
         {
             var direction = (_target.position - _transform.position).normalized;
             var angle = Vector3.Angle(_transform.forward, direction);
-            if(angle < _npc.viewAngle/2)
+            if (angle < _npc.viewAngle / 2)
             {
-                if(Physics.Raycast(_transform.position,direction, out RaycastHit hit, distance, _npc.obstacleMask))
+                if (!Physics.Raycast(_transform.position, direction, out RaycastHit hit, distance, _npc.obstacleMask))
                     _npc.playerDetect = true;
-               
+
             }
         }
         return _npc.playerDetect ? NodeState.Success : NodeState.Failed;
