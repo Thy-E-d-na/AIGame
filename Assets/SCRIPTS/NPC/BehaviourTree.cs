@@ -15,10 +15,10 @@ public class BehaviourTree : MonoBehaviour
     //{
     //    doaChanged?.Invoke();
     //}
-    public float normalVision = 10f;
-    public float normalFoV = 90f;
-    public float stealthVision = 4f;
-    public float stealthFoV = 70f;
+    public float normalVision = 20f;
+    public float normalFoV = 180f;
+    public float stealthVision = 10f;
+    public float stealthFoV = 90f;
 
     [Header("normal vision")]
 
@@ -62,8 +62,8 @@ public class BehaviourTree : MonoBehaviour
     public Transform playerPos;
 
     public float currentHealth = 100f;
-    public float chaseRange = 8f;
-    public float attackRange = 3f;
+    public float chaseRange = 10f;
+    public float attackRange = 2f;
     public float patrolRadius = 8f;
 
     public Selector selector;
@@ -281,7 +281,7 @@ public class Attack : Node
         e_agent.isStopped = true; // dung lai de danh
         _transform.LookAt(_target);        
         state = NodeState.Running;
-        soundMngt.sInstance.PlaySfx(1);
+        //soundMngt.sInstance.PlaySfx(1);
         gameMngt.Instance.isDefeated = true;
         return state;
     }
@@ -308,6 +308,7 @@ public class CheckDistance : Node
     public override NodeState Evaluate()
     {
         var distance = Vector3.Distance(_transform.position, _target.position);
+
         return distance <= this._range ? NodeState.Success : NodeState.Failed;
     }
 }
@@ -334,7 +335,6 @@ public class enemyVision : Node
             {
                 if (!Physics.Raycast(_transform.position, direction, out RaycastHit hit, distance, _npc.obstacleMask))
                     _npc.playerDetect = true;
-                soundMngt.sInstance.PlaySfx(2);
             }
         }
         return _npc.playerDetect ? NodeState.Success : NodeState.Failed;
